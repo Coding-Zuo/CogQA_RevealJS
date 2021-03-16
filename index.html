@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Cognitive Graph for Multi-Hop Reading Comprehension at Scale(ACL2019)</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/league.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                Cognitive Graph for Multi-Hop Reading Comprehension at Scale(ACL2019)
+                <br>
+                <hr>
+
+                <p style="position: relative;left: 20%;margin-top: 10%;">20032202050 左玉晖</p>
+                <aside class="notes">今天我要讲的论文是ACL2019上一篇叫基于大规模多跳阅读理解的认知图。那么什么是认知图谱什么是多跳阅读理解呢？我分开来解释一下</aside>
+            </section>
+        </section>
+
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>什么是认知图谱</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <img src="assets/kg.jpg">
+                <aside class="notes">
+                    2认知图谱我们可能不太了解，但知识图谱都知道，本质上是语义网的知识库，节点表示实体，边表示实体间关系，像这个人和美国是公民的关系，知识图谱。他也包含了很多技术像知识嵌入、图谱构建，知识推理啊等等。但他也有他的一些难点，如歧义问题、链接困难、关系的冗余与组合爆炸等。想要真正解决这些问题可能要在深度学习时代重新考虑知识的表示框架和方法论。因为没有抽象的表征，就不可能有认知模型。没有更丰富的认知模型，就不可能有鲁棒性。你所能拥有的只是大量的数据，然后指望着新事物不会与之前的事物有太大的出入。
+                </aside>
+            </section>
+
+            <section data-background-transition="zoom">
+                <img src="assets/知识事理.jpg" style="width: 1000px;height: 600px;" width="800px" height="600px">
+                <aside class="notes">
+                    3 那么基于此17年哈工大提出过事理图谱，这张图是事理图谱和知识图谱融合的示例，左边是知识图谱表示的是公司之间的实体关系，右边是事理图谱基于<事件，论元集合，逻辑关系> 。其主要侧重点还是在事件抽取方面的工作而不是推理， 后面我列了个表总结了一下三者的关系
+                </aside>
+            </section>
+
+            <section data-background-transition="zoom">
+                <h2>Cognitive Graph</h2>
+                <hr>
+                <p class="fragment" style="font-size: 25px;">动态构建带有上下文信息的知识图谱并进行解释性推理</p>
+                <p class="fragment" style="font-size: 25px;">增加了新的信息粒度和信息结构，会带来更大的想象空间</p>
+                <p class="fragment" style="font-size: 25px;">认知图谱=知识图谱+认知推理+逻辑表达</p>
+                <aside class="notes">
+                    4认知图谱是清华大学唐杰提出的一个概念：1
+                    他概念等于知识图谱+认知推理+逻辑表达，而不是完全基于知识图谱。
+                </aside>
+            </section>
+
+            <section data-background-transition="zoom">
+                <img src="assets/cog.jpg">
+                <aside class="notes">
+                    5这张图是唐杰教授画的，该有的技术都让他包括了，知识图谱方面的技术和理念其实是认知图谱的一个子集了。
+                </aside>
+            </section>
+
+
+            <section data-background-transition="zoom">
+                <img src="assets/图谱区别.jpg" >
+                <aside class="notes">
+                    6这张图是我总结的区别
+                </aside>
+            </section>
+
+            <section data-background-transition="zoom">
+                <h2>dual process theory </h2>
+                <hr>
+                <p class="fragment" style="font-size: 25px;">无意识的直觉系统+有意识的推理系统</p>
+                <p class="fragment" style="font-size: 25px;">隐式提取+显式推理</p>
+                <aside class="notes">
+                    7认知图谱的核心理论是来自认知科学中的双过程理论。是模仿人类认知过程也就是直觉系统+思考推理系统。
+                    拿多跳阅读理解为例为例，分为“快速将注意力定位到相关实体段落”和“分析句子语意进行推断答案”
+                </aside>
+            </section>
+
+            <section data-background-transition="zoom">
+                <img src="assets/ali.jpg" >
+                <aside class="notes">
+                    8 认知图谱在工业上是有落地的，阿里搜索事业部有认知图谱团队，他们是从电商角度构建知识图谱，通过知识图谱总结出一系列Concept节点，为的是利用知识图谱提取出用户需求的描述，来做更解释性的更丰富的推荐。这个地方是认知图谱。
+                </aside>
+            </section>
+
+
+
+            <aside class="notes">
+                认知图谱可以被解释为“基于原始文本数据，针对特定问题情境，使用强大的机器学习模型动态构建的，节点带有上下文语义信息的知识图谱”。
+                认知图谱和知识图谱的区别？
+                认知图谱是包含知识图谱的相关技术的。知识图谱的任务主要是包括知识图谱的表示、构建和存储。这些是构建知识库的过程。
+                认知推理的底层是知识推理，而知识图谱目的是完善知识。面向知识图谱的认知推理可以基于已有的知识推理出新的知识，或者发现错误矛盾的知识。
+                认知图谱是为了解决复杂理解问题或少样本知识图谱推理问题如歧义问题、链接困难、关系的冗余与组合爆炸等。认知推理其实更具有人脑特性，相对更动态一些，
+                可以基于知识感知来调整推理，也可以基于推理来调整知识和感知。交叉了认知科学对人类知识的总结，有助于划分和处理知识图谱的相关问题。
+
+                认知图谱主要有三方面创新，分别对应人类认知智能的三个方面：
+                1.（长期记忆）直接存储带索引的文本数据，使用信息检索算法代替知识图谱的显式边来访问相关知识。
+
+                2.（系统1推理）图谱依据查询动态、多步构建，实体节点通过相关实体识别模型产生。
+
+                3.（系统2推理）图中节点产生的同时拥有上下文信息的隐表示，可通过图神经网络等模型进行可解释的关系推理。
+
+                本质上，认知图谱的改进思路是减少图谱构建时的信息损失(两元一谓)，将信息处理压力转移给检索和自然语言理解算法，同时保留图结构进行可解释关系推理。
+            </aside>
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>什么是多跳阅读理解</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>Single-Hop QA</h3>
+                <hr>
+                <p class="fragment" style="font-size: 35px;float: left;height: 150px;">
+                    现有单跳QA问题及数据集存在以下不足：
+                    <br>
+                    <br>
+                </p>
+                <p class="fragment" style="font-size: 22px;float: right">1.对AI推理能力要求不高</p>
+                <p class="fragment" style="font-size: 22px;float: right">2.问题和答案多样性受限</p>
+                <p class="fragment" style="font-size: 22px;float: right">3.无可解释性的推理过程</p>
+                <aside class="notes">
+                    先了解单段落的简单阅读理解，顾名思义，只要匹配上单个段落中的答案就可以。比如让机器做个完形填空或者单项多项选择，答案固定已经超越人类水平。以前我们的问答系统回答的一看就知道是机器人回答的，千篇一律的答案，这存在机器与人的理解鸿沟。局限有以下三点  1 2 3
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <img src="assets/qa1.jpg">
+                <aside class="notes">
+                    总的来说就是我从当前问题中提取出来的课检索信息检索出一些段落，我再在这些段落里找有用的信息再去检索，这是一个迭代的过程。
+                    以本文为例，我有个问题是 有个叫2003这个电影有个场景是在洛杉矶这个咖啡馆拍的，这个电影的导演是谁？那么针对这个问题的实体我可以检索出多个段落的文本，里面可能蕴含这答案或者线索。比如这个图我查出来有old school和 Gone in 60 seconds这个电影相关的文字，我进一步在通过这两个线索在去检索出来进一步的段落，最终找到了两个可能的答案。这种阅读理解更贴近人类真实了解问题的办法。对复杂问题也有很好的解答能力。
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>Multi-Hop QA</h3>
+                <hr>
+                <p class="fragment" style="font-size: 35px;height: 50px;">
+                    多跳QA跨过机器阅读理解和人阅读理解鸿沟的挑战：
+                    <br></p>
+                <p class="fragment" style="font-size: 22px;">
+                    1.理解能力：单段问答模型倾向于在与问题匹配的意义中寻找答案，这不涉及复杂的推理。</p>
+                <p class="fragment" style="font-size: 22px;">
+                    2.可解释性：展示推理路径能够验证逻辑严格性，对质量保证系统的可靠性至关重要。但数据集中给出的是无序的句子级别的解释，但我们人可以通过逻辑一步一步给出有序的、实体级别的解释。</p>
+                <p class="fragment" style="font-size: 22px;">3.大规模的数据(时间成本)：任何QA系统都要处理大规模的知识，多跳阅读可能更多。</p>
+                <aside class="notes">
+                    多跳阅读理解的挑战主要有三点。123
+                </aside>
+            </section>
+
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>摘要</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>Abstract</h3>
+                <hr>
+                <p class="fragment" style="font-size: 35px;height: 50px;">提出新的多跳QA框架CogQA</p>
+                <p class="fragment" style="font-size: 35px;height: 50px;">基于双过程理论System1:隐式提取，System2:显式推理</p>
+                <p class="fragment" style="font-size: 35px;height: 50px;">可以给出答案的解释路径</p>
+                <p class="fragment" style="font-size: 35px;height: 50px;">基于Bert和GNN处理HotpotQA数据集</p>
+                <p class="fragment" style="font-size: 35px;height: 50px;">数据集榜单持续3个月第一名</p>
+                <aside class="notes">
+                    看一下本文的贡献
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <img src="assets/all_suanfa.jpg">
+                <aside class="notes">
+                    接着看一下算法流程，算法框架分为系统一，隐式提取系统和系统二显示推理系统。提出一个问题，使用系统1从检索器查到的多个文本进行提取答案和实体，构建出认知图给系统二去推理，系统二还可以通过推理的结果反向指导系统1 的线索提取。///////首先初始用问题提到的节点作为前沿节点进行初始化，算法是一个迭代的过程，收集提及前沿节点的线索，由系统一生成语义向量，遍历前沿节点，如果这是一个hop节点，用系统1在段落中找到下一跳hop或者答案候选。先遍历这些hop段中的内容y，如果y在语料库中但不在认知图中，用y创建一个新的hop节点，如果y在图中，但当前的图中节点和他没有边，给y添加一个边并让他也成为前沿节点。再遍历可能的答案，给他们和当前前沿节点连上边。再用GNN更新隐层表示，循环这个过程 直到认知图中没有前沿节点，或者图足够大了。最后用全连接层预测出概率最大的答案节点。
+                </aside>
+            </section>
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>隐式提取System1</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>System1</h3>
+                <hr>
+                <p class="fragment" style="font-size: 35px;">模仿大脑通过隐式注意提取相关信息，是直觉和无意识的系统。</p>
+                <p class="fragment" style="font-size: 35px;"> 从段落中提取与问题相关的实体和答案日期，并对其语义信息进行编码。</p>
+                <aside class="notes">
+                    看一下系统一是如何实现的。1 2
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>System1:BERT Input</h3>
+                <hr>
+                <img src="assets/inputbert.jpg">
+                <aside class="notes">
+                    14采用bert，bert是以字为编码的，输入是字的embeding加上句子的embedding，加上位置编码，这里的位置编码和transformer三角函数公式不一样，直接出示话为1234，句子编码也是第一个句子是0第二个句子是1。每个句子是SEP分割的。
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <img src="assets/bert.jpg">
+                <aside class="notes">
+                    15作者的输入的问题加线索加段落的形式，每个训练数据的开头是CLS标签，这个标签主要是bert用于下游分类任务的，按字编码的注意力模型，和RNN模型不同，每个字的输出对自己的表征大，为了体现句子的信息，选择一个无实际意义的标签比较公平，selfattention每个输出是有整个句子的信息的。提取出来的sem是要交给GNN的这个后面再说。这里面CLS提取的语义经过研究是很弱的甚至不如word2vec、glove。这是2020年字节一篇文章研究发现的，提出了一个flow模型矫正了bert///我们要预测是答案或者下一个hop的段落起始下标，引入两对可学习的向量，分别和段落中的每个输出相乘做softmax拿到概率最大的索引，如果end大于start说明模型也不知道答案是什么，就没有答案。
+
+                    这是刚才给出的语义向量，他这块话的不清楚，源码上是给一个线性层学习出W2，输出给提取到的实体或者答案当做特征表示，这里有一个loss输出，这个输出可以反作用于bert提取，和cv中Googlenet一样多输出，相当于一个指导的过程(我的理解)。这个认知图是有向图，系统二的GNN是可换的，作者只是用了一个普通的有向图卷积，通过右乘度矩阵获得信息传递，更新节点信息。
+                </aside>
+            </section>
+        </section>
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>显式推理System2</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>System2</h3>
+                <hr>
+                <p class="fragment" style="font-size: 35px;">在System1基础上进行有意识的的可控的推理。</p>
+                <p class="fragment" style="font-size: 35px;">根据系统一提取的语义信息进行深度推理。
+                    在信息一提取出的信息图上，搜集线索。并且指导系统一更好的提取下一跳实体。</p>
+                <p class="fragment" style="font-size: 35px;">迭代直到所有可能的答案都被找到，再由系统二推理出最终答案。</p>
+                <aside class="notes">
+                    再看系统二  1 2 3
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <img src="assets/cogqa.jpg" style="width: 650px;height: 450px;">
+                <hr>
+                <p class="fragment" style="font-size: 20px">
+                    \[\begin{aligned}
+                    \Delta = \sigma((AD^{-1})^T\sigma(XW_1))
+                    \end{aligned} \]
+                <p>
+                <p class="fragment" style="font-size: 20px">
+                    \[\begin{aligned}
+                    X’=\sigma(XW_2+\Delta)
+                    \end{aligned} \]
+                <p>
+                <aside class="notes">
+                    17系统二的图神经网络是可以更换的，作者只是使用了普通的基于有向图的GCN
+
+                    右乘度归一化的度矩阵，传递指向他的节点的信息，第二个公司进行节点更新。
+                </aside>
+            </section>
+        </section>
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>实验</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>数据集HotpotQA</h3>
+                <hr>
+                <p class="fragment" style="font-size: 35px;">112,779个问题，84%需要多跳推理。</p>
+                <img src="assets/hopdata.jpg">
+                <aside class="notes">
+                    18然后多跳推理的数据集，名字很有意思 hotpotQA火锅QA
+
+                    看到他的json结构是每个问题对应的答案段落有很多。
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <img src="assets/shiyantu.png">
+                <aside class="notes">
+                    19 作者做了一些消融实验 和 和其他人对比的实验
+
+                    基本上都领先，只有在一般疑问句的效果不如第二名。
+                </aside>
+            </section>
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>展望</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h3>Prospect</h3>
+                <hr>
+                <p class="fragment" style="font-size: 28px;">现在GNN虽然使用关系边作为归纳偏执，但仍然无法指向可控、可解释、鲁棒的符号计算。</p>
+                <p class="fragment" style="font-size: 28px;">另辟蹊径，认知图谱基于双通道理论，是否还存在其他支撑理论，来构建新架构。</p>
+                <p class="fragment" style="font-size: 28px;">如何与人的记忆机理相结合，包括长期记忆和短期记忆，但工作模式和机理尚不清楚。长期记忆可能存储的是一个记忆模型，记忆模型不再是一个网络的概念，而是一个计算型的网络。</p>
+                <p class="fragment" style="font-size: 28px;">认知图谱如何与外界反馈相结合是一个全新的问题，当然可以考虑通过反馈强化学习来实现，但具体方法和实现模式还要深入研究。</p>
+                <p class="fragment" style="font-size: 28px;">双过程理论可以借鉴，用于多模态场景如FVQA</p>
+                <aside class="notes">
+                    1234
+                    认知心理学家将知识分为两类:自下而上的信息，是直接来自我们感官的信息;还有自上而下的知识，是我们对世界的先验知识,例如,字母和数字是两个不同的类别，单词和数字是由来自这些类别之中的元素所组成的，等等。这种模棱两可的B/13图像，在不同的上下文中会呈现出不同的面貌，因为我们会尝试着将落在视网膜上的光线与合乎逻辑的世界相结合。
+                    找到一种方法将自下而上和自上而下两者整合为一体，是人工智能的当务之急，却常常被人忽视。
+                </aside>
+            </section>
+        </section>
+
+
+        <section data-background-transition="zoom">
+            <h2>Thank you Bye</h2>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        math: {
+            mathjax: 'plugin/MathJax.js',
+            config: 'TeX-AMS_HTML-full'  // 参考 http://docs.mathjax.org/en/latest/config-files.html
+        },
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            },
+            {src: 'plugin/math/math.js', async: true}
+        ]
+
+
+    });
+</script>
+</body>
+</html>
